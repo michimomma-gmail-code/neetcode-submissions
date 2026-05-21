@@ -1,0 +1,52 @@
+class Solution:
+    def isNStraightHand0(self, hand: List[int], groupSize: int) -> bool:
+
+        if len(hand) % groupSize != 0:
+            return False
+
+        card_counts = Counter(hand)
+
+        print(card_counts)
+        sorted_counts = sorted(card_counts.keys())
+        print(sorted_counts)
+
+        for card in sorted_counts:
+
+            this_card_counts = card_counts[card]
+
+            if this_card_counts > 0:
+
+                for i in range(groupSize):
+                    if card_counts[ card + i ] < this_card_counts:
+                        return False
+
+                    card_counts[ card + i ] -= this_card_counts
+
+        return True
+
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+
+        if len(hand) % groupSize != 0:
+            return False
+
+        card_counts = Counter(hand)
+        min_heap = list( card_counts.keys() )
+        heapq.heapify( min_heap )
+
+#        for card in sorted_counts:
+
+        while min_heap :
+            card = min_heap[0]
+            this_card_counts = card_counts[card]
+
+            if this_card_counts == 0:
+                heapq.heappop( min_heap )
+                continue
+
+            for i in range(groupSize):
+                if card_counts[ card + i ] < this_card_counts:
+                    return False
+
+                card_counts[ card + i ] -= this_card_counts
+
+        return True
