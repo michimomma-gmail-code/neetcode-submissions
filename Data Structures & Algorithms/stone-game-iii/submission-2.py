@@ -1,0 +1,26 @@
+sys.setrecursionlimit(10**5) # Increases limit to 100,000
+class Solution:
+    def stoneGameIII(self, stoneValue: List[int]) -> str:
+        n = len(stoneValue)
+        mem = {}
+        def dfs(i):
+            if i >= n:
+                return 0
+            if i in mem:
+                return mem[i]
+            max_score = -float("infinity")
+            stone_taken = 0
+
+            for k in range(1, 4):
+                if i + k - 1 < n:
+                    stone_taken += stoneValue[i + k - 1]
+                    max_score = max(max_score, stone_taken - dfs(i + k))
+            
+            mem[i] = max_score
+            return max_score
+
+        
+        score = dfs(0)
+        if score > 0: return "Alice"
+        elif score < 0: return "Bob"
+        else: return "Tie"
